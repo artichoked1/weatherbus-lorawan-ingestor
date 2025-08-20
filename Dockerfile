@@ -31,7 +31,7 @@ USER app:app
 WORKDIR /app
 COPY --from=build /out/ingestor /usr/local/bin/ingestor
 
-# Document runtime env (set these at `docker run -e` time)
+# Set these at runtime.
 # ENV TTN_REGION_HOST=au1.cloud.thethings.network
 # ENV TTN_APP_ID=your_app
 # ENV TTN_API_KEY=your_key
