@@ -1,0 +1,10 @@
+.git
+**/*.log
+bin/
+out/
+dist/
+build/
+vendor/
+*.test
+*.tmp
+.coverage
