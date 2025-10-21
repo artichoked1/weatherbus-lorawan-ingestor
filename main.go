@@ -258,7 +258,10 @@ func main() {
 	appID := mustEnv("TTN_APP_ID")
 	apiKey := mustEnv("TTN_API_KEY")
 	host := mustEnv("TTN_REGION_HOST") // e.g. au1.cloud.thethings.network
-	topic := envOr("MQTT_TOPIC", fmt.Sprintf("v3/%s@ttn/devices/+/up", appID))
+	port := envOr("TTN_MQTT_PORT", "1883")
+	authEnabled := envOr("MQTT_USE_AUTH", "true")
+	protocol := envOr("TTN_MQTT_PROTOCOL", "mqtt") // mqtt or mqtts
+	topic := mustEnv("MQTT_TOPIC")
 
 	// DB pool
 	pool, err := pgxpool.New(ctx, pgdsn)
@@ -269,11 +272,14 @@ func main() {
 
 	// MQTT client options
 	opts := mqtt.NewClientOptions().
-		AddBroker("tls://" + host + ":8883").
-		SetUsername(appID).
-		SetPassword(apiKey).
+		AddBroker(protocol + "://" + host + ":" + port).
 		SetClientID("ttn-uplink-ingestor-" + randSuffix()).
 		SetTLSConfig(&tls.Config{MinVersion: tls.VersionTLS12})
+
+	if authEnabled == "true" {
+		opts.SetUsername(appID)
+		opts.SetPassword(apiKey)
+	}
 
 	opts.SetAutoReconnect(true)
 	opts.SetConnectionLostHandler(func(_ mqtt.Client, err error) {

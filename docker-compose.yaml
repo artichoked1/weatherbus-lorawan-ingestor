@@ -8,6 +8,8 @@ services:
       TTN_APP_ID: ${TTN_APP_ID}
       TTN_API_KEY: ${TTN_API_KEY}
       PG_DSN: postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:5432/${PGDATABASE}?sslmode=disable
+    env_file:
+      - .env
     restart: unless-stopped
     logging:
       options:
