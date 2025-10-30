@@ -273,8 +273,11 @@ func main() {
 	// MQTT client options
 	opts := mqtt.NewClientOptions().
 		AddBroker(protocol + "://" + host + ":" + port).
-		SetClientID("ttn-uplink-ingestor-" + randSuffix()).
-		SetTLSConfig(&tls.Config{MinVersion: tls.VersionTLS12})
+		SetClientID("ttn-uplink-ingestor-" + randSuffix())
+
+	if strings.HasPrefix(protocol, "mqtts") {
+		opts.SetTLSConfig(&tls.Config{MinVersion: tls.VersionTLS12})
+	}
 
 	if authEnabled == "true" {
 		opts.SetUsername(appID)
