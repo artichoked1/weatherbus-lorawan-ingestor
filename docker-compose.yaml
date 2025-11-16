@@ -1,12 +1,7 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      TTN_REGION_HOST: ${TTN_REGION_HOST}
-      TTN_APP_ID: ${TTN_APP_ID}
-      TTN_API_KEY: ${TTN_API_KEY}
+    # image: ghcr.io/artichoked1/weatherbus-lorawan-ingestor:master
+    build: .
       PG_DSN: postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:5432/${PGDATABASE}?sslmode=disable
     env_file:
       - .env

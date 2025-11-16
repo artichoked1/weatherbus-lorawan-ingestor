@@ -255,12 +255,12 @@ func main() {
 	defer cancel()
 
 	pgdsn := mustEnv("PG_DSN")
-	appID := mustEnv("TTN_APP_ID")
-	apiKey := mustEnv("TTN_API_KEY")
-	host := mustEnv("TTN_REGION_HOST") // e.g. au1.cloud.thethings.network
-	port := envOr("TTN_MQTT_PORT", "1883")
+	username := mustEnv("MQTT_USERNAME")
+	password := mustEnv("MQTT_PASSWORD")
+	host := mustEnv("MQTT_HOST")
+	port := envOr("MQTT_PORT", "1883")
 	authEnabled := envOr("MQTT_USE_AUTH", "true")
-	protocol := envOr("TTN_MQTT_PROTOCOL", "mqtt") // mqtt or mqtts
+	protocol := envOr("MQTT_PROTOCOL", "mqtt")
 	topic := mustEnv("MQTT_TOPIC")
 
 	// DB pool
@@ -280,8 +280,8 @@ func main() {
 	}
 
 	if authEnabled == "true" {
-		opts.SetUsername(appID)
-		opts.SetPassword(apiKey)
+		opts.SetUsername(username)
+		opts.SetPassword(password)
 	}
 
 	opts.SetAutoReconnect(true)
